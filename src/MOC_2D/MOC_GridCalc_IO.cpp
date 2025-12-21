@@ -28,7 +28,7 @@
 *
 ****************************************************************************/
 
-#include "MOC_GridCalc_BDE.h"
+#include "MOC_GridCalc.h"
 #include "math.h"
 // Tharen Rice May 2020 Change: New call for fstream
 //#include "fstream.h"
@@ -38,12 +38,12 @@ using namespace std;
 #include "engineering_constants.hpp"
 #include "stubs.h"
 
-namespace legacy {
+namespace moc_2d {
 
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-void MOC_GridCalc::OutputSummaryFile(void)
+void MOC_2D::OutputSummaryFile(void)
 {
 	int i,j,jj;
 	double vel1,vel2;
@@ -248,7 +248,7 @@ void MOC_GridCalc::OutputSummaryFile(void)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-void MOC_GridCalc::OutputCenterlineData(std::string fileName )
+void MOC_2D::OutputCenterlineData(std::string fileName )
 {
 	// This will output the Centerline data in a file. 
 	fstream ofile;
@@ -271,7 +271,7 @@ void MOC_GridCalc::OutputCenterlineData(std::string fileName )
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-void MOC_GridCalc::OutputMOC_Grid(void )
+void MOC_2D::OutputMOC_Grid(void )
 {
 	// This will output the entire grid. 
 	int i,j;
@@ -329,7 +329,7 @@ void MOC_GridCalc::OutputMOC_Grid(void )
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-void MOC_GridCalc::OutputJ(int j, std::string fileName)
+void MOC_2D::OutputJ(int j, std::string fileName)
 {
 	fstream outfile;
 	outfile.open(fileName, ios::out);
@@ -344,7 +344,7 @@ void MOC_GridCalc::OutputJ(int j, std::string fileName)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-void MOC_GridCalc::OutputInitialKernel(int jEnd)
+void MOC_2D::OutputInitialKernel(int jEnd)
 {
 	//	This function is called to output the initial wall and axis points based
 	//	up to the initial thetaB guess
@@ -371,7 +371,7 @@ void MOC_GridCalc::OutputInitialKernel(int jEnd)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-void MOC_GridCalc::OutputPrimaryChars(int nType)
+void MOC_2D::OutputPrimaryChars(int nType)
 {
 	//	This file contains the PLT file for the major lines in the grid
 	//	These include, the wall, BD and DE
@@ -411,7 +411,7 @@ void MOC_GridCalc::OutputPrimaryChars(int nType)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-void MOC_GridCalc::OutputStreamlines(int iEnd, int jEnd, int nni, int nnj, int geom)
+void MOC_2D::OutputStreamlines(int iEnd, int jEnd, int nni, int nnj, int geom)
 {
 	//	This functions calculate iEnd+1 streamlines from the nozzle throat to the nozzle
 	//	exit plane.  For each streamline, x,r,mach,p,t,rho, and gamma are output
@@ -671,7 +671,7 @@ void MOC_GridCalc::OutputStreamlines(int iEnd, int jEnd, int nni, int nnj, int g
 }
 
 
-void MOC_GridCalc::OutputTDKRAODataFile(int jStart, int jEnd)
+void MOC_2D::OutputTDKRAODataFile(int jStart, int jEnd)
 {
 	//	This function will output a file called rao.dat.  This file can be used by TDK99 as
 	//	the inviscid nozzle contour file.  If you were used RAO, this file would be 
@@ -691,7 +691,7 @@ void MOC_GridCalc::OutputTDKRAODataFile(int jStart, int jEnd)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-void MOC_GridCalc::OutputFinalKernel(int iD, int jD, int jEnd)
+void MOC_2D::OutputFinalKernel(int iD, int jD, int jEnd)
 {
 	//	iD is the i of point D
 	//	jD is the j of point D
@@ -732,7 +732,7 @@ void MOC_GridCalc::OutputFinalKernel(int iD, int jD, int jEnd)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-void MOC_GridCalc::OutputUncroppedKernel(int jEnd)
+void MOC_2D::OutputUncroppedKernel(int jEnd)
 {
 	//	iD is the i of point D
 	//	jD is the j of point D

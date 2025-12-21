@@ -27,14 +27,14 @@
 *
 ****************************************************************************/
 
-#include "MOC_GridCalc_BDE.h"
+#include "MOC_GridCalc.h"
 #include "math.h"
 #include <fstream>
 using namespace std;
 #include "engineering_constants.hpp"
 #include "stubs.h"
 
-namespace legacy {
+namespace moc_2d {
 
 /****************************************************************************
 *
@@ -42,7 +42,7 @@ namespace legacy {
 *
 ****************************************************************************/
 
-MOC_GridCalc::MOC_GridCalc(void)
+MOC_2D::MOC_2D(void)
 {
 	//Default the number of characteristics to 20
 	nC = -99;
@@ -66,7 +66,7 @@ MOC_GridCalc::MOC_GridCalc(void)
 }
 
 
-MOC_GridCalc::~MOC_GridCalc( void)
+MOC_2D::~MOC_2D( void)
 {
 	return;
 }
@@ -76,7 +76,7 @@ MOC_GridCalc::~MOC_GridCalc( void)
 *	Public Functions
 *
 ****************************************************************************/
-int MOC_GridCalc::SetInitialProperties(double pres, double temp, double mWt, 
+int MOC_2D::SetInitialProperties(double pres, double temp, double mWt, 
 								double gamma, double pa, int n, double rwtu, double rwtd, 
 								double dTLimit, int nRRCPP, int NSLi, int NSLj,
 								double vel, int flag, double idealIsp)
@@ -120,7 +120,7 @@ int MOC_GridCalc::SetInitialProperties(double pres, double temp, double mWt,
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-void MOC_GridCalc::SetSolutionParameters( int geom, int type, int param, double value,
+void MOC_2D::SetSolutionParameters( int geom, int type, int param, double value,
 										 double t)
 {
 	nozzleGeom = geom;
@@ -136,7 +136,7 @@ void MOC_GridCalc::SetSolutionParameters( int geom, int type, int param, double 
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-void MOC_GridCalc::SetSolutionParameters( int geom, int type, int param, double value1, 
+void MOC_2D::SetSolutionParameters( int geom, int type, int param, double value1, 
 										 double value2, double t)
 {
 	SetSolutionParameters( geom, type, param, value1, t);
@@ -146,7 +146,7 @@ void MOC_GridCalc::SetSolutionParameters( int geom, int type, int param, double 
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-int MOC_GridCalc::CreateMOCGrid(void)
+int MOC_2D::CreateMOCGrid(void)
 {
 	int flag = 0;
 	if ( nC < 5) AfxMessageBox("Increase the number of starting characteristics > 5");
@@ -163,7 +163,7 @@ int MOC_GridCalc::CreateMOCGrid(void)
 //************************************************************************************
 //************************************************************************************
 //************************************************************************************
-int MOC_GridCalc::CalcMOC_Grid( double g, double pAmb, int tFlag, double mT, int nType, 
+int MOC_2D::CalcMOC_Grid( double g, double pAmb, int tFlag, double mT, int nType, 
 							   int dParam, int geom, int nni, int nnj)
 {
 	//	pT = total pressure; psia
@@ -233,7 +233,7 @@ int MOC_GridCalc::CalcMOC_Grid( double g, double pAmb, int tFlag, double mT, int
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-int MOC_GridCalc::CalcContouredNozzle( int paramType, double *paramMatch, 
+int MOC_2D::CalcContouredNozzle( int paramType, double *paramMatch, 
 								double g, double pAmb, int geom, int nRRCPlus, int nType,
 								int nni, int nnj)
 {
@@ -699,7 +699,7 @@ int MOC_GridCalc::CalcContouredNozzle( int paramType, double *paramMatch,
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-int MOC_GridCalc::CalcConeNozzle( int paramType, double *paramMatch, 
+int MOC_2D::CalcConeNozzle( int paramType, double *paramMatch, 
 								  double pAmb, int geom, int nni, int nnj)
 {
 	//	Inputs:
@@ -805,7 +805,7 @@ int MOC_GridCalc::CalcConeNozzle( int paramType, double *paramMatch,
 //*********************************************************************************
 //*********************************************************************************
 //**************************************************************************************
-int MOC_GridCalc::CheckRRCForNegativePoints(int j)
+int MOC_2D::CheckRRCForNegativePoints(int j)
 {
 	int i;
 	for (i = 0; i <= iLast[j]; i++) if (r[i][j] < 0.0) return 1;
@@ -815,7 +815,7 @@ int MOC_GridCalc::CheckRRCForNegativePoints(int j)
 //*********************************************************************************
 //*********************************************************************************
 //**************************************************************************************
-int MOC_GridCalc::CalcArcWallPoint( int j, double rad, double betaMax, double dBLimit, int geom)
+int MOC_2D::CalcArcWallPoint( int j, double rad, double betaMax, double dBLimit, int geom)
 {
 	//	j: RRC number
 	//	rad: downstream radius of curvature
@@ -933,7 +933,7 @@ int MOC_GridCalc::CalcArcWallPoint( int j, double rad, double betaMax, double dB
 //*********************************************************************************
 //*********************************************************************************
 //**************************************************************************************
-void MOC_GridCalc::CalcConeWallPoint( int j, double cA, int geom)
+void MOC_2D::CalcConeWallPoint( int j, double cA, int geom)
 {
 	//	j: RRC number
 	//	dr: increase in r over r[0][j-1]
@@ -1010,7 +1010,7 @@ void MOC_GridCalc::CalcConeWallPoint( int j, double cA, int geom)
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-int MOC_GridCalc::CalcRRCsAlongArc(int j, double rad, double alphaMax, double dALimit, 
+int MOC_2D::CalcRRCsAlongArc(int j, double rad, double alphaMax, double dALimit, 
 									 double pAmb, int geom )
 {
 	//	j: number of the RRC
@@ -1102,7 +1102,7 @@ int MOC_GridCalc::CalcRRCsAlongArc(int j, double rad, double alphaMax, double dA
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-void MOC_GridCalc::CalcRemainingMesh( int iD, int jD, int jEnd, int geom)
+void MOC_2D::CalcRemainingMesh( int iD, int jD, int jEnd, int geom)
 {
 	//	Starting from the line DE, calculate the remaining mesh to the centerline.
 	//	Use the same routines that were used previously
@@ -1147,7 +1147,7 @@ void MOC_GridCalc::CalcRemainingMesh( int iD, int jD, int jEnd, int geom)
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-void MOC_GridCalc::CalcWallContour(int iD, int jStart, int jEnd, int geom)
+void MOC_2D::CalcWallContour(int iD, int jStart, int jEnd, int geom)
 {
 	//	At this point the MOC mesh above the region BDE has already been found.
 	//	BDE was found by constructing LRC from DE back to the wall. The massflow along the 
@@ -1321,7 +1321,7 @@ void MOC_GridCalc::CalcWallContour(int iD, int jStart, int jEnd, int geom)
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-void MOC_GridCalc::CropNozzleToLength( int jEnd)
+void MOC_2D::CropNozzleToLength( int jEnd)
 {
 	double ratio, dxErr;
 	int i,j,newLast;
@@ -1416,7 +1416,7 @@ void MOC_GridCalc::CropNozzleToLength( int jEnd)
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-double MOC_GridCalc::CalcMdotBD( int j, double xD)
+double MOC_2D::CalcMdotBD( int j, double xD)
 {
 	//	This function calculates the mass flow from the wall to a point XD along j
 	//	The massflow at each point along j has already been calculated from the axis
@@ -1452,7 +1452,7 @@ double MOC_GridCalc::CalcMdotBD( int j, double xD)
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-dummyStruct MOC_GridCalc::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int nRRCPlus,
+dummyStruct MOC_2D::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int nRRCPlus,
 									  int nType, double rMatch, int pointFlag)
 {
 	//	This function is used to determine the LRC DE along the RRC (j) where the mass
@@ -1744,7 +1744,7 @@ dummyStruct MOC_GridCalc::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int 
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-dummyStruct MOC_GridCalc::FindPointE( int jStart, double xD, double mdotMatch, int geom, 
+dummyStruct MOC_2D::FindPointE( int jStart, double xD, double mdotMatch, int geom, 
 									   int nType, int nRRCPlus, int pointFlag)
 {
 
@@ -2213,7 +2213,7 @@ dummyStruct MOC_GridCalc::FindPointE( int jStart, double xD, double mdotMatch, i
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-void MOC_GridCalc::ResetGrid(int iStart, int iEnd, int jStart, int jEnd)
+void MOC_2D::ResetGrid(int iStart, int iEnd, int jStart, int jEnd)
 {
 	// Reset Grid while leaving the initial data line intact
 	if (iEnd > maxLRC) iEnd = maxLRC;
@@ -2242,7 +2242,7 @@ void MOC_GridCalc::ResetGrid(int iStart, int iEnd, int jStart, int jEnd)
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-void MOC_GridCalc::CalcAxialMeshPoint(int j, int iEnd)
+void MOC_2D::CalcAxialMeshPoint(int j, int iEnd)
 {
 	//	Along the Axial point, r = 0 and theta = 0;  The point of influence is [i-1][j] 
 	//	This point is on the same RRC as [iEnd][j]
@@ -2298,7 +2298,7 @@ void MOC_GridCalc::CalcAxialMeshPoint(int j, int iEnd)
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-void MOC_GridCalc::CalcContourWallPoint(int j, int iBottom)
+void MOC_2D::CalcContourWallPoint(int j, int iBottom)
 {
 	//	This function calculates the wall points beyond the downstream radius
 	//	For the wall point [0][j], 2 points influence it, the wall point [0][j-1] and
@@ -2340,7 +2340,7 @@ void MOC_GridCalc::CalcContourWallPoint(int j, int iBottom)
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-void MOC_GridCalc::CalcSpecialWallPoint(int j, double rad, double alpha2)
+void MOC_2D::CalcSpecialWallPoint(int j, double rad, double alpha2)
 {
 	//	j: RRC increment
 	//	rad: downstream radius of curvature
@@ -2446,7 +2446,7 @@ void MOC_GridCalc::CalcSpecialWallPoint(int j, double rad, double alpha2)
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-int MOC_GridCalc::CalcInteriorMeshPoints( int j, int iStart, int iEnd, int flag, int geom)
+int MOC_2D::CalcInteriorMeshPoints( int j, int iStart, int iEnd, int flag, int geom)
 {
 	//	This calculate all of the interior points for the MOC grid. For all points above the 
 	//	centerline. For every point 3 [i][j].
@@ -2671,7 +2671,7 @@ int MOC_GridCalc::CalcInteriorMeshPoints( int j, int iStart, int iEnd, int flag,
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-void MOC_GridCalc::InitializeDataMembers( void)
+void MOC_2D::InitializeDataMembers( void)
 {
 	//	This function initializes the arrays for the data members
 	mach = new double*[maxLRC];
@@ -2720,7 +2720,7 @@ void MOC_GridCalc::InitializeDataMembers( void)
 //**************************************************************************************
 //**************************************************************************************
 //**************************************************************************************
-void MOC_GridCalc::DeleteDataMembers( void)
+void MOC_2D::DeleteDataMembers( void)
 {
 	//	This function initializes the arrays for the data members
 	for (int i = 0; i < maxLRC; i++)
@@ -2755,7 +2755,7 @@ void MOC_GridCalc::DeleteDataMembers( void)
 //************************************************************************************
 //************************************************************************************
 //************************************************************************************
-void MOC_GridCalc::CalcIsentropicP_T_RHO( int i, int j, double g, double m)
+void MOC_2D::CalcIsentropicP_T_RHO( int i, int j, double g, double m)
 {
 	// This function calculate the isentropic relations at a given point i,j
 	dummyStruct dS;
@@ -2771,7 +2771,7 @@ void MOC_GridCalc::CalcIsentropicP_T_RHO( int i, int j, double g, double m)
 //************************************************************************************
 //************************************************************************************
 //************************************************************************************
-dummyStruct MOC_GridCalc::CalcIsentropicP_T_RHO( double g, double m)
+dummyStruct MOC_2D::CalcIsentropicP_T_RHO( double g, double m)
 {
 	// This function calculate the isentropic relations at a given point i,j
 	dummyStruct dS;
@@ -2785,7 +2785,7 @@ dummyStruct MOC_GridCalc::CalcIsentropicP_T_RHO( double g, double m)
 //************************************************************************************
 //************************************************************************************
 //************************************************************************************
-int MOC_GridCalc::CalcInitialThroatLine( double rUp, int n, double g, 
+int MOC_2D::CalcInitialThroatLine( double rUp, int n, double g, 
 										   double pAmb, int geom, int tFlag, double mT)
 {
 	//	rUp: upstream throat radius
@@ -2885,7 +2885,7 @@ int MOC_GridCalc::CalcInitialThroatLine( double rUp, int n, double g,
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-dummyStruct MOC_GridCalc::CalcHallLine(double rUp, double x, double r, double g, int type)
+dummyStruct MOC_2D::CalcHallLine(double rUp, double x, double r, double g, int type)
 {
 	//	rUp = upstream radius of curvature
 	//	x = axial distance
@@ -2937,7 +2937,7 @@ dummyStruct MOC_GridCalc::CalcHallLine(double rUp, double x, double r, double g,
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_GridCalc::CalcMu(double mach)
+double MOC_2D::CalcMu(double mach)
 {
 	//	Mach angle
 	return asin(1./mach);
@@ -2946,7 +2946,7 @@ double MOC_GridCalc::CalcMu(double mach)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_GridCalc::CalcA(double mach, double g)
+double MOC_2D::CalcA(double mach, double g)
 {
 	//	First term in the dtheta eq. Rao eq. 15
 	return MM(mach)/(mach*(1.+(g-1.)/2.*mach*mach));
@@ -2955,7 +2955,7 @@ double MOC_GridCalc::CalcA(double mach, double g)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_GridCalc::CalcB(double mach, double theta, double r)
+double MOC_2D::CalcB(double mach, double theta, double r)
 {
 	//	Second term of dtheta Equation for LRC as a function of dz
 	//theta = max(theta, 1e-5);
@@ -2966,7 +2966,7 @@ double MOC_GridCalc::CalcB(double mach, double theta, double r)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_GridCalc::Calcb(double mach, double theta, double r)
+double MOC_2D::Calcb(double mach, double theta, double r)
 {
 	//	Second term of dtheta Equation for RRC as a function of dz
 	//theta = max(theta, 1e-5);
@@ -2977,7 +2977,7 @@ double MOC_GridCalc::Calcb(double mach, double theta, double r)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_GridCalc::CalcR(double mach, double theta, double r)
+double MOC_2D::CalcR(double mach, double theta, double r)
 {
 	//	Second term of dtheta Equation for LRC as a function of dz
 	//theta = max(theta, 1e-5);
@@ -2988,7 +2988,7 @@ double MOC_GridCalc::CalcR(double mach, double theta, double r)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_GridCalc::CalcRStar(double mach, double theta, double r)
+double MOC_2D::CalcRStar(double mach, double theta, double r)
 {
 	//	Second term of dtheta Equation for LRC as a function of dz
 	//theta = max(theta, 1e-5);
@@ -2999,7 +2999,7 @@ double MOC_GridCalc::CalcRStar(double mach, double theta, double r)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_GridCalc::lDyDx( double theta, double mu)
+double MOC_2D::lDyDx( double theta, double mu)
 {
 	//	characteristic angle for LRC
 	return tan(theta+mu);
@@ -3008,7 +3008,7 @@ double MOC_GridCalc::lDyDx( double theta, double mu)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_GridCalc::rDyDx( double theta, double mu)
+double MOC_2D::rDyDx( double theta, double mu)
 {
 	//	characteristic angle for RRC
 	return tan(theta-mu);
@@ -3017,7 +3017,7 @@ double MOC_GridCalc::rDyDx( double theta, double mu)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_GridCalc::TanAvg( double x, double y)
+double MOC_2D::TanAvg( double x, double y)
 {
 	//	Tanget averaging function.  x and y are tangents of two angles
 	return tan(0.5 * (atan(x)+atan(y)));
@@ -3026,7 +3026,7 @@ double MOC_GridCalc::TanAvg( double x, double y)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_GridCalc::MM(double mach)
+double MOC_2D::MM(double mach)
 {
 	return sqrt(mach*mach-1);
 }
@@ -3034,7 +3034,7 @@ double MOC_GridCalc::MM(double mach)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-void MOC_GridCalc::Sauer(int i, int geom, double RS)
+void MOC_2D::Sauer(int i, int geom, double RS)
 {
 	//	This is taken from the TDK program. This is how they calculate the 
 	//	Initial data Line
@@ -3083,7 +3083,7 @@ void MOC_GridCalc::Sauer(int i, int geom, double RS)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-int MOC_GridCalc::KLThroat(int i, int geom, double RS)
+int MOC_2D::KLThroat(int i, int geom, double RS)
 {
 	//	This is taken from 'Transonic Flow in Small Throat Radius Curvature Nozzles',
 	//	by Kliegel and Levine. In this they take the HALL method and modify the Axi
@@ -3163,7 +3163,7 @@ int MOC_GridCalc::KLThroat(int i, int geom, double RS)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-void MOC_GridCalc::CalcMassFlowAndThrustAlongMesh(int jStart, int jEnd, double pAmb,int geom)
+void MOC_2D::CalcMassFlowAndThrustAlongMesh(int jStart, int jEnd, double pAmb,int geom)
 {
 	//	This function will calculate the mass flow along each RRC, starting
 	//	between jStart and jEnd
@@ -3225,7 +3225,7 @@ void MOC_GridCalc::CalcMassFlowAndThrustAlongMesh(int jStart, int jEnd, double p
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-double MOC_GridCalc::CalcPMFunction( double m, double g)
+double MOC_2D::CalcPMFunction( double m, double g)
 {
 	//	This is the Prandtl-Meyer Function as found in Anderson (Fund. of Aero., p368).
 	//m = mach;
@@ -3238,7 +3238,7 @@ double MOC_GridCalc::CalcPMFunction( double m, double g)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-void MOC_GridCalc::CalcBDERegion(int iD, int jD, int jEnd, int geom)
+void MOC_2D::CalcBDERegion(int iD, int jD, int jEnd, int geom)
 {
 	//	This function will compute the remaining MOC grid from the LRC DE back to the 
 	//	i = 0. It uses the same as function 
@@ -3394,7 +3394,7 @@ void MOC_GridCalc::CalcBDERegion(int iD, int jD, int jEnd, int geom)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-dummyStruct MOC_GridCalc::RungeKutta(double h, double r0, double x0, double mach0, 
+dummyStruct MOC_2D::RungeKutta(double h, double r0, double x0, double mach0, 
 									 double theta0, double gamma0)
 {
 	//	This function uses the Runge-Kutta method for integration of
@@ -3438,7 +3438,7 @@ dummyStruct MOC_GridCalc::RungeKutta(double h, double r0, double x0, double mach
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-dummyStruct MOC_GridCalc::RungeKuttaFehlberg(double h, double r0, double x0, double mach0, 
+dummyStruct MOC_2D::RungeKuttaFehlberg(double h, double r0, double x0, double mach0, 
 									 double theta0, double gamma0)
 {
 	//	This function uses the Runge-Kutta method for integration of
@@ -3494,7 +3494,7 @@ dummyStruct MOC_GridCalc::RungeKuttaFehlberg(double h, double r0, double x0, dou
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-double MOC_GridCalc::Deriv(int i, double r0, double mach0, double theta0, double gamma0)
+double MOC_2D::Deriv(int i, double r0, double mach0, double theta0, double gamma0)
 {
 	//	i = 0; return dM/dr
 	//	i = 1; return dx/dr
@@ -3543,7 +3543,7 @@ double MOC_GridCalc::Deriv(int i, double r0, double mach0, double theta0, double
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-double MOC_GridCalc::CalcNozzleSurfaceArea(int jLast,int geom)
+double MOC_2D::CalcNozzleSurfaceArea(int jLast,int geom)
 {
 	//	This will calculate the nozzle surface area based on the wall contour
 	//	from j = 0 to j = jLast. For a TWOD nozzle, 12 in nozzle width is assumed
@@ -3598,7 +3598,7 @@ double MOC_GridCalc::CalcNozzleSurfaceArea(int jLast,int geom)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-double MOC_GridCalc::FindSAFx( double xNew, int geom)
+double MOC_2D::FindSAFx( double xNew, int geom)
 {
 	//	Find the R along the wall that corresponds to xNew
 	int j;
@@ -3618,7 +3618,7 @@ double MOC_GridCalc::FindSAFx( double xNew, int geom)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-int MOC_GridCalc::CalcDE(int iD, int jD, int jEnd, int nType, int geom)
+int MOC_2D::CalcDE(int iD, int jD, int jEnd, int nType, int geom)
 {
 	//	This function will resolve the complete line DE for later use
 	//	iD, jD is the point D on line BD
@@ -3698,7 +3698,7 @@ int MOC_GridCalc::CalcDE(int iD, int jD, int jEnd, int nType, int geom)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-double MOC_GridCalc::SetThetaB(int pType, double err, double thetaB0)
+double MOC_2D::SetThetaB(int pType, double err, double thetaB0)
 {
 	//	Depending on the parameterType, and the other given values
 	//	set the new value for the thetaB1

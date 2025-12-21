@@ -27,13 +27,13 @@
 *
 ****************************************************************************/
 
-#ifndef MOC_GridCalc_CLASS
-#define MOC_GridCalc_CLASS
+#ifndef MOC_2D_CLASS
+#define MOC_2D_CLASS
 
 #include "dummyStruct.h"
 #include <string>
 
-namespace legacy {
+namespace moc_2d {
 
 enum nozzleGeom{NOGEOM,TWOD, AXI};
 enum nozzleType{NOTYPE,RAO, CONE, PERFECT, FIXEDEND};
@@ -41,11 +41,11 @@ enum param {NOPARAM,EXITMACH, EPS, NOZZLELENGTH, ENDPOINT, EXITPRESSURE};
 enum secantMethod{ SEC_FAIL, SEC_FAIL_LOW, SEC_FAIL_HIGH, SEC_OK};
 enum failflag {NO, YES};
 
-class MOC_GridCalc
+class MOC_2D
 {
 	public:
-		MOC_GridCalc( void);
-		~MOC_GridCalc(void);
+		MOC_2D( void);
+		~MOC_2D(void);
 		/************************************************************
 		*															*
 		*					PUBLIC FUNCTIONS						*
@@ -199,6 +199,6 @@ class MOC_GridCalc
 		double CalcNozzleSurfaceArea(int lastRRC, int geom);
 
 };
-}
 
+}
 #endif
