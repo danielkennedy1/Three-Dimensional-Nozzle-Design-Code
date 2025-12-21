@@ -29,9 +29,9 @@
 
 #ifndef MOC_GridCalc_CLASS
 #define MOC_GridCalc_CLASS
-//#include "afx.h"
+
 #include "dummyStruct.h"
-#include "Chart.h"
+#include <string>
 
 enum nozzleGeom{NOGEOM,TWOD, AXI};
 enum nozzleType{NOTYPE,RAO, CONE, PERFECT, FIXEDEND};
@@ -169,10 +169,10 @@ class MOC_GridCalc
 		void OutputInitialKernel(int jEnd);
 		void OutputFinalKernel(int iD, int jD, int jEnd);
 		void OutputUncroppedKernel(int jEnd);
-		void OutputCenterlineData(CString);
+		void OutputCenterlineData(std::string fileName);
 		void OutputMOC_Grid( void);
 		void OutputSummaryFile( void);
-		void OutputJ(int j, CString fileName);
+		void OutputJ(int j, std::string fileName);
 		void OutputPrimaryChars(int nType);
 		void OutputStreamlines(int iEnd, int jEnd, int nSLi, int nSLj, int geom);	
 		void OutputTDKRAODataFile(int jStart, int jEnd);

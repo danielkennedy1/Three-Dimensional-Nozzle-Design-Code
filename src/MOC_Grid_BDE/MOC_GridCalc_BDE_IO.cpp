@@ -36,9 +36,7 @@
 using namespace std;
 // END of changes
 #include "engineering_constants.hpp"
-#include "Resource.h"
-#include "MOC_GridDlg.h"
-#include "MOCPlotDialog.h"
+#include "stubs.h"
 
 //****************************************************************************************
 //****************************************************************************************
@@ -248,7 +246,7 @@ void MOC_GridCalc::OutputSummaryFile(void)
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-void MOC_GridCalc::OutputCenterlineData(CString fileName )
+void MOC_GridCalc::OutputCenterlineData(std::string fileName )
 {
 	// This will output the Centerline data in a file. 
 	fstream ofile;
@@ -329,7 +327,7 @@ void MOC_GridCalc::OutputMOC_Grid(void )
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-void MOC_GridCalc::OutputJ(int j, CString fileName)
+void MOC_GridCalc::OutputJ(int j, std::string fileName)
 {
 	fstream outfile;
 	outfile.open(fileName, ios::out);
@@ -437,10 +435,12 @@ void MOC_GridCalc::OutputStreamlines(int iEnd, int jEnd, int nni, int nnj, int g
 	//	Warn the user if the axial streamline spacing is less than 2 
 	if (x[0][jEnd]/nnj >= 2)
 	{
-		CString str;
-		char buffer[10];
 		int source = int(x[0][jEnd]/2.+1);
-		_gcvt( source, 7, buffer );
+        char buffer[10];
+        snprintf(buffer, sizeof(buffer), "%d", source);
+        std::string str = "The Streamlines will be output with a DX/R* > 2.\n";
+        str += "To fix this, set the axial values = ";
+        str += buffer;
 		
 
 		str = "The Streamlines will be output with a DX/R* > 2.\n";

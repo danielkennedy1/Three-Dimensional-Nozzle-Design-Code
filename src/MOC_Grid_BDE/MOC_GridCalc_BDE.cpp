@@ -29,16 +29,10 @@
 
 #include "MOC_GridCalc_BDE.h"
 #include "math.h"
-#include "afx.h"
-// Tharen Rice May 2020 Change: New call for fstream
-//#include "fstream.h"
 #include <fstream>
 using namespace std;
-// END OF CHANGES
 #include "engineering_constants.hpp"
-#include "Resource.h"
-#include "MOC_GridDlg.h"
-#include "MOCPlotDialog.h"
+#include "stubs.h"
 
 
 /****************************************************************************
@@ -332,7 +326,7 @@ int MOC_GridCalc::CalcContouredNozzle( int paramType, double *paramMatch,
 			//	-lastKernelJ is the max thetaB.
 			lastKernelJ = -lastKernelJ;
 			thetaBMax = asin(x[0][lastKernelJ]/RWTD);
-			if (i == 0) thetaB[0] = __min(0.95*thetaBMax, 0.95*thetaB[0]);
+			if (i == 0) thetaB[0] = min(0.95*thetaBMax, 0.95*thetaB[0]);
 			else if (i == 1) thetaB[1] = 0.5*(thetaB[0] + thetaB[1]);
 			xArcMax = sin(thetaB[i])*RWTD;
 			j = 0;	
@@ -388,7 +382,7 @@ int MOC_GridCalc::CalcContouredNozzle( int paramType, double *paramMatch,
 			}
 			if ( k > 10)
 			{
-				CString str;
+                std::string str;
 				if (thetaB[2] == thetaBMax || thetaB[2] == thetaBMin) 
 				{
 					str = "The RAO Method could not find the for this high\n";
@@ -423,7 +417,7 @@ int MOC_GridCalc::CalcContouredNozzle( int paramType, double *paramMatch,
 			}
 			if ( k > 10)
 			{
-				CString str;
+                std::string str;
 				str = "Could not converge on THETAB for given Area Ratio";
 				AfxMessageBox(str);
 				OutputJ(lastKernelJ,"LastKernel.out");
@@ -465,8 +459,8 @@ int MOC_GridCalc::CalcContouredNozzle( int paramType, double *paramMatch,
 	//	Set the min theta if both initial guesses are too high.
 	if (paramErr[0] < 0.0 && paramErr[1] < 0.0)
 	{
-		if (paramType != ENDPOINT) thetaBMin = __max(thetaB[0],thetaB[1]);
-		else thetaBMax = __min(thetaB[0], thetaB[1]);
+		if (paramType != ENDPOINT) thetaBMin = max(thetaB[0],thetaB[1]);
+		else thetaBMax = min(thetaB[0], thetaB[1]);
 	}
 	i = 0;
 	paramErr[2] = 9.9;
@@ -576,7 +570,7 @@ int MOC_GridCalc::CalcContouredNozzle( int paramType, double *paramMatch,
 	{
 		if (fabs(paramErr[2]) > 1e-5)
 		{
-			CString str;
+            std::string str;
 			if (thetaB[2] == thetaBMax || thetaB[2] == thetaBMin) 
 			{
 				str = "The RAO Method could not solve for this high\n";
@@ -698,12 +692,6 @@ int MOC_GridCalc::CalcContouredNozzle( int paramType, double *paramMatch,
 	}
 	OutputTDKRAODataFile(j, lastRRC);
 
-	//	Set up the chart
-	MOCPlotDialog plot;
-	plot.FormatMOCChart(lastRRC);
-	plot.PlotMOCChartPoints( x[0], r[0], lastRRC, x[0][lastRRC]+.1, r[0][lastRRC]+.1);
-	plot.DoModal();
-
 	return SEC_OK;
 }
 
@@ -811,12 +799,6 @@ int MOC_GridCalc::CalcConeNozzle( int paramType, double *paramMatch,
 	}
 	OutputTDKRAODataFile(0, lastRRC);
 
-	//	Set up the chart
-	MOCPlotDialog plot;
-	plot.FormatMOCChart(lastRRC);
-	plot.PlotMOCChartPoints( x[0], r[0], lastRRC, x[0][lastRRC]+.1, r[0][lastRRC]+.1);
-	plot.DoModal();
-
 	return SEC_OK;
 }
 //*********************************************************************************
@@ -825,8 +807,8 @@ int MOC_GridCalc::CalcConeNozzle( int paramType, double *paramMatch,
 int MOC_GridCalc::CheckRRCForNegativePoints(int j)
 {
 	int i;
-	for (i = 0; i <= iLast[j]; i++) if (r[i][j] < 0.0) return TRUE;
-	return FALSE;
+	for (i = 0; i <= iLast[j]; i++) if (r[i][j] < 0.0) return 1;
+	return 0;
 }
 
 //*********************************************************************************
@@ -1049,7 +1031,7 @@ int MOC_GridCalc::CalcRRCsAlongArc(int j, double rad, double alphaMax, double dA
 	
 	//	This is the maximum X value to be calculated
 	xArcMax = sin(alphaMax)*rad;
-	minusRFlag = TRUE;
+	minusRFlag = 1;
 
 	while (fabs(x[0][j] - xArcMax) > 1e-6)
 	{
@@ -1094,7 +1076,7 @@ int MOC_GridCalc::CalcRRCsAlongArc(int j, double rad, double alphaMax, double dA
 		//	first J where there isn't a point below 0.0, set that j to j = 1.
 		//*********************
 		// Check for negative points, but do not do anything to the initial data line
-		if (CheckRRCForNegativePoints(j) == TRUE && j != 1)
+		if (CheckRRCForNegativePoints(j) == 1 && j != 1)
 		{
 			for ( k = 0; k <= iLast[j]; k++)
 			{
@@ -1527,7 +1509,7 @@ dummyStruct MOC_GridCalc::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int 
 		//	can be calculated
 		//	Set the first guess equal to the wall point on BD.  This is obviuosly
 		//	not the right point, but it is a good start
-		xDMax = __min(9e9,x[iEnd][j]);
+		xDMax = min(9e9,x[iEnd][j]);
 		xD[0] = x[0][j];
 		xDMin = x[0][j];
 		//	Velocity
@@ -2598,7 +2580,7 @@ int MOC_GridCalc::CalcInteriorMeshPoints( int j, int iStart, int iEnd, int flag,
 			TH[3] = (TH[1] + TH[2]) / 2. + 0.25*(M[2]*(A[3]+A[2]) - M[1]*(A[1]+A[3]) - 
 				M[3]*(A[2]-A[1]) + T[2] - T[1]);
 
-			if ( TH[3] < 0.0) TH[3] = 0.0;//__max(TH[3], 1.e-5);
+			if ( TH[3] < 0.0) TH[3] = 0.0;//max(TH[3], 1.e-5);
 
 			//	Set starting slope equal to new slope
 			s3lrc = lDyDx(TH[3], CalcMu(M[3]));
@@ -2673,7 +2655,7 @@ int MOC_GridCalc::CalcInteriorMeshPoints( int j, int iStart, int iEnd, int flag,
 			AfxMessageBox("Current RRC Point is behind Last RRC point.\nCalcInteriorMeshPoints");
 		}*/
 			
-		if ( theta[i-1][j] != 0.0 ) theta[i][j] = __max(theta[i][j], 0.0);
+		if ( theta[i-1][j] != 0.0 ) theta[i][j] = max(theta[i][j], 0.0);
 //		else if ( theta[i][j] < 0.0) theta[i][j] = 0.0;
 	
 		//	Use the isentropic relations to calculate the properties of point [i][j]
@@ -2682,7 +2664,7 @@ int MOC_GridCalc::CalcInteriorMeshPoints( int j, int iStart, int iEnd, int flag,
 
 	}	//	End of for i step
 
-	return TRUE;
+	return 1;
 }
 
 //**************************************************************************************
@@ -2975,7 +2957,7 @@ double MOC_GridCalc::CalcA(double mach, double g)
 double MOC_GridCalc::CalcB(double mach, double theta, double r)
 {
 	//	Second term of dtheta Equation for LRC as a function of dz
-	//theta = __max(theta, 1e-5);
+	//theta = max(theta, 1e-5);
 	if ( r!= 0.0) return 1./(r*(MM(mach)/tan(theta)-1.));
 	else return 0.0;
 }
@@ -2986,7 +2968,7 @@ double MOC_GridCalc::CalcB(double mach, double theta, double r)
 double MOC_GridCalc::Calcb(double mach, double theta, double r)
 {
 	//	Second term of dtheta Equation for RRC as a function of dz
-	//theta = __max(theta, 1e-5);
+	//theta = max(theta, 1e-5);
 	if ( r!= 0.0) return 1./(r*(MM(mach)/tan(theta)+1.));
 	else return 0.0;
 }
@@ -2997,7 +2979,7 @@ double MOC_GridCalc::Calcb(double mach, double theta, double r)
 double MOC_GridCalc::CalcR(double mach, double theta, double r)
 {
 	//	Second term of dtheta Equation for LRC as a function of dz
-	//theta = __max(theta, 1e-5);
+	//theta = max(theta, 1e-5);
 	if ( r!= 0.0) return 1./(r*(MM(mach) + 1./tan(theta)));
 	else return 0.0;
 }
@@ -3008,7 +2990,7 @@ double MOC_GridCalc::CalcR(double mach, double theta, double r)
 double MOC_GridCalc::CalcRStar(double mach, double theta, double r)
 {
 	//	Second term of dtheta Equation for LRC as a function of dz
-	//theta = __max(theta, 1e-5);
+	//theta = max(theta, 1e-5);
 	if ( r!= 0.0) return 1./(r*(MM(mach) - 1./tan(theta)));
 	else return 0.0;
 }
@@ -3367,7 +3349,7 @@ void MOC_GridCalc::CalcBDERegion(int iD, int jD, int jEnd, int geom)
 					M[3]*(A[2]-A[1]) + T[2] - T[1]);
 
 				//	TODO: 1e-5
-				if ( TH[3] != 0.0) TH[3] = __max(TH[3], 0.0);
+				if ( TH[3] != 0.0) TH[3] = max(TH[3], 0.0); // NOTE: was __max
 
 				//	Set starting slope equal to new slope
 				s3lrc = lDyDx(TH[3], CalcMu(M[3]));

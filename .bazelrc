@@ -1,0 +1,2 @@
+build --action_env=CC=/run/current-system/sw/bin/clang
+build --action_env=CXX=/run/current-system/sw/bin/clang++
