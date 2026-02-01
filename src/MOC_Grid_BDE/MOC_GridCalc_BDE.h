@@ -33,6 +33,10 @@
 #include "dummyStruct.h"
 #include <string>
 
+// Forward declarations for test classes
+class MOCRegressionTest_RaoAxiNozzle_IdenticalResults_Test;
+class MOCRegressionTest_InvalidInput_SameBehavior_Test;
+
 namespace legacy {
 
 enum nozzleGeom{NOGEOM,TWOD, AXI};
@@ -43,6 +47,10 @@ enum failflag {NO, YES};
 
 class MOC_GridCalc
 {
+	// Friend declarations for regression tests
+	friend class ::MOCRegressionTest_RaoAxiNozzle_IdenticalResults_Test;
+	friend class ::MOCRegressionTest_InvalidInput_SameBehavior_Test;
+
 	public:
 		MOC_GridCalc( void);
 		~MOC_GridCalc(void);

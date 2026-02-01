@@ -4,39 +4,37 @@
 #include "MOC_Grid_BDE/MOC_GridCalc_BDE.h"
 
 int main() {
-    MOC_GridCalc* gridCalc = new MOC_GridCalc();
+    legacy::MOC_GridCalc* gridCalc = new legacy::MOC_GridCalc();
 
-    double throatPressurePSI = 11.078 * 14.5038;     // CEA t_p  
-    double throatTempRankine = 2270.7 * 1.8;         // CEA t_t
-    double gamma = 1.2545;                            // CEA t_gamma
-    double R = 1545.0 / 21.65;                        // ft-lbf/(lbm-R)
-    double throatVelocity = sqrt(gamma * R * throatTempRankine);
+    double presPSI = 20.0 * 14.5038;        // CEA t_p
+    double throatTempRankine = 2550.7 * 1.8;            // CEA t_t
+    double gamma = 1.2545;                              // CEA t_gamma
+    double ambient = 1.0 * 14.5038;
 
-    std::cout << "Throat velocity: " << throatVelocity << std::endl;
 
     gridCalc->SetInitialProperties(
-        throatPressurePSI,
+        presPSI,
         throatTempRankine,
-        21.65,               // CEA t_mw
+        21.65,              // CEA t_mw
         gamma,
-        1.0 * 14.5038,       // ambient
+        ambient,            // ambient
         141,
-        1.0,                 // rwtu
-        1.0,                 // rwtd
+        1.0,                // rwtu
+        1.0,                // rwtd
         0.05,
         5,
         30,
         30,
-        throatVelocity,
-        1,                   // throatFlag = 1
-        213.5                // CEA isp
+        0,
+        0,
+        213.5               // CEA isp
     );
 
     gridCalc->SetSolutionParameters(
-        AXI,
-        RAO,
-        EPS,
-        3.3263,
+        legacy::AXI,
+        legacy::PERFECT,
+        legacy::EXITPRESSURE,
+        ambient * 1.1,
         15
     );
 

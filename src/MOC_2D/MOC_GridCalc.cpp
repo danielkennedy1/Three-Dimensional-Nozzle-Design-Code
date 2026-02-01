@@ -81,8 +81,8 @@ int MOC_2D::SetInitialProperties(double pres, double temp, double mWt,
 								double dTLimit, int nRRCPP, int NSLi, int NSLj,
 								double vel, int flag, double idealIsp)
 {
-	if ( pres <= 0.0 || temp <= 0.0 || mWt <= 0.0 || gamma <= 0.0 )
-	{
+        if ( pres <= 0.0 || temp <= 0.0 || mWt <= 0.0 || gamma <= 0.0 )
+    {
 		AfxMessageBox("All input parameters must be > 0.0");
 		return 0;
 	}

@@ -1,2 +1,10 @@
 build --action_env=CC=/run/current-system/sw/bin/clang
 build --action_env=CXX=/run/current-system/sw/bin/clang++
+
+# Debug build configuration
+build:dbg --compilation_mode=dbg
+build:dbg --strip=never
+build:dbg --copt=-O0
+build:dbg --copt=-g
+build:dbg --copt=-fno-omit-frame-pointer
+

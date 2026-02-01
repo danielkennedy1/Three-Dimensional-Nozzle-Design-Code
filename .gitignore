@@ -20,3 +20,8 @@
 # Ignore jekyll build output.
 /production
 /.sass-cache
+
+.dap.json
+*.out
+*.dat
+*.plt

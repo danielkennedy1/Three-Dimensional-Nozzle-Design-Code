@@ -1521,6 +1521,7 @@ dummyStruct MOC_GridCalc::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int 
 			//	nozzle wall exit must be equal to the equation below (thetaCalc). Compare
 			//	these numbers and set the error to param_err
 			
+            // FIXME: thetaCalc appears as NaN
 			thetaCalc = 0.5 * asin(2*(pres[0][j] - pAmb)*144 / 
 				( rho[0][j]*w0*w0 * tan(CalcMu(mach[0][j]))));
 			param_err[0] = (theta[0][j] - thetaCalc) / thetaCalc;
@@ -1549,9 +1550,9 @@ dummyStruct MOC_GridCalc::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int 
 			}
 		}
 		
-//		ofstream fs;
-//		fs.open("thetaCalc.out", ios::app);
-//		fs << "i\tXD\tThetaCalc\tThetaE\txE\trE\tErr" << endl;
+		ofstream fs;
+		fs.open("thetaCalc.out", ios::app);
+		fs << "i\tXD\tThetaCalc\tThetaE\txE\trE\tErr" << endl;
 		
 		//	Step through each point along j to find where the param_err changes sign < 0.0;
 		//	This is done differently for a Rao and a Fixend nozzle
@@ -1574,8 +1575,8 @@ dummyStruct MOC_GridCalc::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int 
 					param_err[1] = (dS.dSx[10] - thetaCalc) / fabs(thetaCalc);
 				}
 				
-		//			fs << i << "\t" << xD[1] << "\t" << thetaCalc*DEG_PER_RAD << "\t" << dS.dSx[10]*DEG_PER_RAD
-		//				<< "\t" << dS.dSx[0] << "\t" <<  dS.dSx[1] << "\t" << param_err[1] << endl;
+					fs << i << "\t" << xD[1] << "\t" << thetaCalc*DEG_PER_RAD << "\t" << dS.dSx[10]*DEG_PER_RAD
+						<< "\t" << dS.dSx[0] << "\t" <<  dS.dSx[1] << "\t" << param_err[1] << endl;
 				i++;
 			}	// end of while
 		}
@@ -1589,12 +1590,12 @@ dummyStruct MOC_GridCalc::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int 
 				dS = FindPointE(j, xD[1], mdotBD, geom, nType, nRRCPlus,pointFlag);
 				param_err[1] = (dS.dSx[8] - rMatch);
 				
-				//			fs << i << "\t" << xD[1] << "\t" << thetaCalc*DEG_PER_RAD << "\t" << dS.dSx[10]*DEG_PER_RAD
-				//				<< "\t" << dS.dSx[0] << "\t" <<  dS.dSx[1] << "\t" << param_err[1] << endl;
+							fs << i << "\t" << xD[1] << "\t" << thetaCalc*DEG_PER_RAD << "\t" << dS.dSx[10]*DEG_PER_RAD
+								<< "\t" << dS.dSx[0] << "\t" <<  dS.dSx[1] << "\t" << param_err[1] << endl;
 				i++;
 			}	// end of while
 		}
-//		fs.close();
+		fs.close();
 		if (thetaCalc < 0.0 && nType == RAO)
 		{
 			dS.dSi[2] = SEC_FAIL_HIGH;
