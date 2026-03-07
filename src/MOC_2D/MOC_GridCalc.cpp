@@ -833,7 +833,7 @@ int MOC_2D::CalcArcWallPoint( int j, double rad, double betaMax, double dBLimit,
 	flagSpecial = 0; // No special point have been added
 
 	//	Set constants at point 1 that will be used later
-	slrc[1] = lDyDx(theta[1][j-1],CalcMu(mach[1][j-1])); // slope of LRC from point 1
+	slrc[1] = lDyDx(theta[1][j-1],mach_angle(mach[1][j-1])); // slope of LRC from point 1
 	A[1] = CalcA(mach[1][j-1], gamma[1][j-1]);
 	B[1] = CalcB(mach[1][j-1], theta[1][j-1], r[1][j-1]);
 	R[1] = CalcR(mach[1][j-1], theta[1][j-1], r[1][j-1]);
@@ -885,7 +885,7 @@ int MOC_2D::CalcArcWallPoint( int j, double rad, double betaMax, double dBLimit,
 		//	Calculate new mach at 3 and the related characteristic values.
 		mach[0][j] = mach[1][j-1] + (theta[0][j] - theta[1][j-1] + 0.5*T1)/(0.5*(A[1] + A[3]));
 
-		slrc[3] = lDyDx(theta[0][j], CalcMu(mach[0][j]));
+		slrc[3] = lDyDx(theta[0][j], mach_angle(mach[0][j]));
 		A[3] = CalcA(mach[0][j], gamma[0][j]);
 		B[3] = CalcB(mach[0][j], theta[0][j], r[0][j]);
 		R[3] = CalcR(mach[0][j], theta[0][j], r[0][j]);
@@ -946,7 +946,7 @@ void MOC_2D::CalcConeWallPoint( int j, double cA, int geom)
 	double slrc[4], A[4], B[4], R[4],T1, slrc13, MErr, m3Old;
 
 	//	Set constants at point 1 that will be used later
-	slrc[1] = lDyDx(theta[1][j-1],CalcMu(mach[1][j-1])); // slope of LRC from point 1
+	slrc[1] = lDyDx(theta[1][j-1],mach_angle(mach[1][j-1])); // slope of LRC from point 1
 	A[1] = CalcA(mach[1][j-1], gamma[1][j-1]);
 	B[1] = CalcB(mach[1][j-1], theta[1][j-1], r[1][j-1]);
 	R[1] = CalcR(mach[1][j-1], theta[1][j-1], r[1][j-1]);
@@ -959,7 +959,7 @@ void MOC_2D::CalcConeWallPoint( int j, double cA, int geom)
 	A[3] = A[1];
 	B[3] = B[1];
 	R[3] = R[1];
-	slrc[3] = lDyDx(theta[0][j],CalcMu(mach[1][j-1]));
+	slrc[3] = lDyDx(theta[0][j],mach_angle(mach[1][j-1]));
 
 	//	Iterate until Mach stops moving
 	MErr = 9.9;
@@ -985,7 +985,7 @@ void MOC_2D::CalcConeWallPoint( int j, double cA, int geom)
 		//	Calculate new mach at 3 and the related characteristic values.
 		mach[0][j] = mach[1][j-1] + (theta[0][j] - theta[1][j-1] + 0.5*T1)/(0.5*(A[1] + A[3]));
 
-		slrc[3] = lDyDx(theta[0][j], CalcMu(mach[0][j]));
+		slrc[3] = lDyDx(theta[0][j], mach_angle(mach[0][j]));
 		A[3] = CalcA(mach[0][j], gamma[0][j]);
 		B[3] = CalcB(mach[0][j], theta[0][j], r[0][j]);
 		R[3] = CalcR(mach[0][j], theta[0][j], r[0][j]);
@@ -1522,7 +1522,7 @@ dummyStruct MOC_2D::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int nRRCPl
 			//	these numbers and set the error to param_err
 			
 			thetaCalc = 0.5 * asin(2*(pres[0][j] - pAmb)*144 / 
-				( rho[0][j]*w0*w0 * tan(CalcMu(mach[0][j]))));
+				( rho[0][j]*w0*w0 * tan(mach_angle(mach[0][j]))));
 			param_err[0] = (theta[0][j] - thetaCalc) / thetaCalc;
 			if (param_err[0] < 0.)
 			{
@@ -1570,7 +1570,7 @@ dummyStruct MOC_2D::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int nRRCPl
 				if ( nType == RAO)
 				{
 					thetaCalc = 0.5 * asin(2*(dS.dSx[11] - pAmb)*144 / 
-						( dS.dSx[13]*dS.dSx[16]*dS.dSx[16] * tan(CalcMu(dS.dSx[9]))));
+						( dS.dSx[13]*dS.dSx[16]*dS.dSx[16] * tan(mach_angle(dS.dSx[9]))));
 					param_err[1] = (dS.dSx[10] - thetaCalc) / fabs(thetaCalc);
 				}
 				
@@ -1616,7 +1616,7 @@ dummyStruct MOC_2D::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int nRRCPl
 		if ( nType == RAO)
 		{
 			thetaCalc = 0.5 * asin(2*(dS.dSx[11] - pAmb)*144 / 
-				( dS.dSx[13]*dS.dSx[16]*dS.dSx[16] * tan(CalcMu(dS.dSx[9]))));
+				( dS.dSx[13]*dS.dSx[16]*dS.dSx[16] * tan(mach_angle(dS.dSx[9]))));
 			param_err[0] = (dS.dSx[10] - thetaCalc) / thetaCalc;
 						
 			if (thetaCalc < 0.0)
@@ -1652,7 +1652,7 @@ dummyStruct MOC_2D::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int nRRCPl
 				if ( nType == RAO)
 				{
 					thetaCalc = 0.5 * asin(2*(pres[0][j] - pAmb)*144 / 
-					( rho[0][j]*w0*w0 * tan(CalcMu(mach[0][j]))));
+					( rho[0][j]*w0*w0 * tan(mach_angle(mach[0][j]))));
 					param_err[2] = (theta[0][j] - thetaCalc) / thetaCalc;
 					
 					if (thetaCalc < 0.0)
@@ -1700,7 +1700,7 @@ dummyStruct MOC_2D::CalcLRCDE(int j, int iEnd, double pAmb, int geom, int nRRCPl
 					//	from the equation (thetaCalc) and compare it to the thetaE returned in dS.
 					//	For a perfect nozzle THETAE has to equal 0.0
 					thetaCalc = 0.5 * asin(2*(dS.dSx[11] - pAmb)*144 / 
-						( dS.dSx[13]*dS.dSx[16]*dS.dSx[16] * tan(CalcMu(dS.dSx[9]))));
+						( dS.dSx[13]*dS.dSx[16]*dS.dSx[16] * tan(mach_angle(dS.dSx[9]))));
 					param_err[2] = (dS.dSx[10] - thetaCalc) / thetaCalc;
 					
 					if (thetaCalc < 0.0)
@@ -1814,7 +1814,7 @@ dummyStruct MOC_2D::FindPointE( int jStart, double xD, double mdotMatch, int geo
 	tempD = dPTR.dSx[1];
 	rhoD  = dPTR.dSx[2];
 	
-	muD = CalcMu(machD);
+	muD = mach_angle(machD);
 	wD = machD * sqrt(gammaD*(GASCON/molWt)*tempD*GRAV);
 	
 	//	Set the properties at D 
@@ -1917,7 +1917,7 @@ dummyStruct MOC_2D::FindPointE( int jStart, double xD, double mdotMatch, int geo
 				//	the slope for the characteristic is muD).
 				u0 = machD * sqrt(gammaD*GASCON/molWt*GRAV*tempD);
 				rE = sqrt(mdotMatch*144/(GRAV*rhoD*u0*PI));
-				xE = xD + (rE - rD) * lDyDx(thetaD, CalcMu(machD));
+				xE = xD + (rE - rD) * lDyDx(thetaD, mach_angle(machD));
 
 				// Set the properties at E equal to the properties at D
 				dS.dSx[7] = xE;
@@ -1995,7 +1995,7 @@ dummyStruct MOC_2D::FindPointE( int jStart, double xD, double mdotMatch, int geo
 				vel0 = mach0*a0;
 				u0 = vel0*cos(theta0);
 				v0 = vel0*sin(theta0);
-				mu0 = CalcMu(mach0);
+				mu0 = mach_angle(mach0);
 				r0 = rD;
 				x0 = xD;
 				
@@ -2039,7 +2039,7 @@ dummyStruct MOC_2D::FindPointE( int jStart, double xD, double mdotMatch, int geo
 							exit(1);
 						}
 						
-						muE = CalcMu(machE);
+						muE = mach_angle(machE);
 						gammaE = gamma0;
 						//	Calculate the rest of the parameters using isentropic relations
 						dPTR = CalcIsentropicP_T_RHO(gammaE, machE);
@@ -2132,7 +2132,7 @@ dummyStruct MOC_2D::FindPointE( int jStart, double xD, double mdotMatch, int geo
 					thetaE = MXT.dSx[2];
 					rE = r0 + dr;
 					gammaE = gamma0;
-					muE = CalcMu(machE);
+					muE = mach_angle(machE);
 					//	Calculate the rest of the parameters using isentropic relations
 					dPTR = CalcIsentropicP_T_RHO(gammaE, machE);
 					presE = dPTR.dSx[0];
@@ -2254,7 +2254,7 @@ void MOC_2D::CalcAxialMeshPoint(int j, int iEnd)
 	theta[iEnd][j] = 0.0; // 0.0 is the right answer
 	gamma[iEnd][j] = gamma[iEnd-1][j];
 
-	s2 = rDyDx(theta[iEnd-1][j],CalcMu(mach[iEnd-1][j]));
+	s2 = rDyDx(theta[iEnd-1][j],mach_angle(mach[iEnd-1][j]));
 	A2 = CalcA(mach[iEnd-1][j],gamma[iEnd-1][j]);
 	b2 = Calcb(mach[iEnd-1][j], theta[iEnd-1][j], r[iEnd-1][j]);
 	s3 = s2;
@@ -2272,7 +2272,7 @@ void MOC_2D::CalcAxialMeshPoint(int j, int iEnd)
 		mach[iEnd][j] = mach[iEnd-1][j] + 2*(theta[iEnd-1][j] + 
 			b2*(x[iEnd][j] - x[iEnd-1][j]))/(A2+A3);
 		
-		s3 = rDyDx(theta[iEnd][j], CalcMu(mach[iEnd][j]));
+		s3 = rDyDx(theta[iEnd][j], mach_angle(mach[iEnd][j]));
 		A3 = CalcA(mach[iEnd][j], gamma[iEnd][j]);
 
 		MErr = (mach[iEnd][j] - m3Old)/ m3Old;
@@ -2361,13 +2361,13 @@ void MOC_2D::CalcSpecialWallPoint(int j, double rad, double alpha2)
 	gamma[0][j] = gamma[1][j-1];
 
 	//	Set other constants that will be used in the iteration
-	slrc[1] = lDyDx(theta[1][j-1], CalcMu(mach[1][j-1]));
-	slrc[2] = lDyDx(theta[0][j-1], CalcMu(mach[0][j-1]));
+	slrc[1] = lDyDx(theta[1][j-1], mach_angle(mach[1][j-1]));
+	slrc[2] = lDyDx(theta[0][j-1], mach_angle(mach[0][j-1]));
 	A[1] = CalcA(mach[1][j-1], gamma[1][j-1]);
 	B[1] = CalcB(mach[1][j-1], theta[1][j-1], r[1][j-1]);
 	R[1] = CalcR(mach[1][j-1], theta[1][j-1], r[1][j-1]);
-	srrc[1] = rDyDx(theta[1][j-1],CalcMu(mach[1][j-1]));
-	srrc[2] = rDyDx(theta[0][j-1],CalcMu(mach[0][j-1]));
+	srrc[1] = rDyDx(theta[1][j-1],mach_angle(mach[1][j-1]));
+	srrc[2] = rDyDx(theta[0][j-1],mach_angle(mach[0][j-1]));
 	A[2] = CalcA(mach[0][j-1], gamma[0][j-1]);
 	B[2] = CalcB(mach[0][j-1], theta[0][j-1], r[0][j-1]);
 	R[2] = CalcR(mach[0][j-1], theta[0][j-1], r[0][j-1]);
@@ -2419,7 +2419,7 @@ void MOC_2D::CalcSpecialWallPoint(int j, double rad, double alpha2)
 
 		mach[0][j] = M4 + (theta[0][j] - theta4 + 0.5*T4)/(0.5*(A[4]+A[3]));
 
-		K3new = lDyDx(theta[0][j],CalcMu(mach[0][j]));
+		K3new = lDyDx(theta[0][j],mach_angle(mach[0][j]));
 		A3new = CalcA(mach[0][j], gamma[0][j]);
 		B3new = CalcB(mach[0][j], theta[0][j], r[0][j]);
 		R3new = CalcR(mach[0][j], theta[0][j], r[0][j]);
@@ -2492,7 +2492,7 @@ int MOC_2D::CalcInteriorMeshPoints( int j, int iStart, int iEnd, int flag, int g
 		//	Set some constants for Point 1. These are used in later calculations
 		//	There are two sets of solutions that needs to be found.  If the point is not an axial point then
 		//	the normal calculations are ok
-		s[1] = lDyDx(theta[ii][j-1],CalcMu(mach[ii][j-1]));	// slope of characteristic at 1
+		s[1] = lDyDx(theta[ii][j-1],mach_angle(mach[ii][j-1]));	// slope of characteristic at 1
 		A[1] = CalcA(mach[ii][j-1],gamma[ii][j-1]);
 		M[1] = mach[ii][j-1];
 		TH[1] = theta[ii][j-1];
@@ -2517,7 +2517,7 @@ int MOC_2D::CalcInteriorMeshPoints( int j, int iStart, int iEnd, int flag, int g
 		}
 	
 		//	Set some constants for Point 2 
-		s[2] = rDyDx(theta[i-1][j],CalcMu(mach[i-1][j])); // slope of characteristic at 2
+		s[2] = rDyDx(theta[i-1][j],mach_angle(mach[i-1][j])); // slope of characteristic at 2
 		A[2] = CalcA(mach[i-1][j], gamma[i-1][j]);
 		M[2] = mach[i-1][j];
 		TH[2] = theta[i-1][j];
@@ -2584,8 +2584,8 @@ int MOC_2D::CalcInteriorMeshPoints( int j, int iStart, int iEnd, int flag, int g
 			if ( TH[3] < 0.0) TH[3] = 0.0;//max(TH[3], 1.e-5);
 
 			//	Set starting slope equal to new slope
-			s3lrc = lDyDx(TH[3], CalcMu(M[3]));
-			s3rrc = rDyDx(TH[3], CalcMu(M[3]));
+			s3lrc = lDyDx(TH[3], mach_angle(M[3]));
+			s3rrc = rDyDx(TH[3], mach_angle(M[3]));
 			B[3] = CalcB(M[3], TH[3], r[i][j]);
 			b[3] = Calcb(M[3], TH[3], r[i][j]);
 			R[3] = CalcR(M[3], TH[3], r[i][j]);
@@ -2822,7 +2822,7 @@ int MOC_2D::CalcInitialThroatLine( double rUp, int n, double g,
 		if ( i != 0) 
 		{
 			// This calculates a new X assumed it falls on the RRC
-			drdx = rDyDx(theta[i-1][0],CalcMu(mach[i-1][0]));
+			drdx = rDyDx(theta[i-1][0],mach_angle(mach[i-1][0]));
 			
 		}
 		
@@ -2937,7 +2937,7 @@ dummyStruct MOC_2D::CalcHallLine(double rUp, double x, double r, double g, int t
 //****************************************************************************************
 //****************************************************************************************
 //****************************************************************************************
-double MOC_2D::CalcMu(double mach)
+double MOC_2D::mach_angle(double mach)
 {
 	//	Mach angle
 	return asin(1./mach);
@@ -3283,7 +3283,7 @@ void MOC_2D::CalcBDERegion(int iD, int jD, int jEnd, int geom)
 			k = 0;
 					
 			//	Set some constants for Point 1. These are used in later calculations
-			s[1] = lDyDx(theta[i][j-1],CalcMu(mach[i][j-1]));	// slope of characteristic at 1
+			s[1] = lDyDx(theta[i][j-1],mach_angle(mach[i][j-1]));	// slope of characteristic at 1
 			A[1] = CalcA(mach[i][j-1],gamma[i][j-1]);
 			M[1] = mach[i][j-1];
 			TH[1] = theta[i][j-1];
@@ -3292,7 +3292,7 @@ void MOC_2D::CalcBDERegion(int iD, int jD, int jEnd, int geom)
 			RS[1] = CalcRStar(mach[i][j-1], theta[i][j-1], r[i][j-1]);
 		
 			//	Set some constants for Point 2 
-			s[2] = rDyDx(theta[i+1][j],CalcMu(mach[i+1][j])); // slope of characteristic at 2
+			s[2] = rDyDx(theta[i+1][j],mach_angle(mach[i+1][j])); // slope of characteristic at 2
 			A[2] = CalcA(mach[i+1][j], gamma[i+1][j]);
 			M[2] = mach[i+1][j];
 			TH[2] = theta[i+1][j];
@@ -3353,8 +3353,8 @@ void MOC_2D::CalcBDERegion(int iD, int jD, int jEnd, int geom)
 				if ( TH[3] != 0.0) TH[3] = max(TH[3], 0.0); // NOTE: was __max
 
 				//	Set starting slope equal to new slope
-				s3lrc = lDyDx(TH[3], CalcMu(M[3]));
-				s3rrc = rDyDx(TH[3], CalcMu(M[3]));
+				s3lrc = lDyDx(TH[3], mach_angle(M[3]));
+				s3rrc = rDyDx(TH[3], mach_angle(M[3]));
 				B[3] = CalcB(M[3], TH[3], r[i][j]);
 				b[3] = Calcb(M[3], TH[3], r[i][j]);
 				R[3] = CalcR(M[3], TH[3], r[i][j]);
@@ -3502,7 +3502,7 @@ double MOC_2D::Deriv(int i, double r0, double mach0, double theta0, double gamma
 	//  i = 3; return dr/dr = 1
 	double fx, mu0,m32,tt0,D,a,b,c,tanMax,tanTheta;
 
-	mu0 = CalcMu(mach0);
+	mu0 = mach_angle(mach0);
 	if (theta0 < 5e-6)
 	{
 		if ( i == 2) fx = 1/tan(mu0);
@@ -3645,7 +3645,7 @@ int MOC_2D::CalcDE(int iD, int jD, int jEnd, int nType, int geom)
 			//	Because the nozzle is TWOD, along DE , Mach, and theta are constant
 			
 			rDE[jD-1] = 0.0;
-			xDE[jD-1] = xDE[jD] - (rDE[jD]-rDE[jD-1])/lDyDx(thetaDE[jD],CalcMu(mDE[jD]));
+			xDE[jD-1] = xDE[jD] - (rDE[jD]-rDE[jD-1])/lDyDx(thetaDE[jD],mach_angle(mDE[jD]));
 			mDE[jD-1] = mDE[jD];
 			tDE[jD-1] = tDE[jD];
 			pDE[jD-1] = pDE[jD];

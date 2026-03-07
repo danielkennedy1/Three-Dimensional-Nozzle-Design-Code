@@ -28,12 +28,12 @@ struct NozzleTestCase {
 // Test case from main.cpp - RAO axisymmetric nozzle
 NozzleTestCase GetRaoAxiCase() {
     NozzleTestCase tc;
-    tc.pTotalPSI = 20 * 14.5038;     // CEA t_p
-    tc.tempRankine = 2550.0 * 1.8;         // CEA t_t
-    tc.gamma = 1.2545;                            // CEA t_gamma
-    tc.R = 1545.0 / 21.65;                        // ft-lbf/(lbm-R)
-    tc.molecularWeight = 21.65;                   // CEA t_mw
-    tc.ambientPressure = 1.0 * 14.5038;          // ambient
+    tc.pTotalPSI = 20 * 14.5038;                    // CEA t_p
+    tc.tempRankine = 2550.0 * 1.8;                  // CEA t_t
+    tc.gamma = 1.2545;                              // CEA t_gamma
+    tc.R = 1545.0 / 21.65;                          // ft-lbf/(lbm-R)
+    tc.molecularWeight = 21.65;                     // CEA t_mw
+    tc.ambientPressure = 1.0 * 14.5038;             // ambient
     tc.nCharacteristics = 141;
     tc.rwtu = 1.0;
     tc.rwtd = 1.0;
@@ -41,8 +41,8 @@ NozzleTestCase GetRaoAxiCase() {
     tc.nRRCAboveBD = 5;
     tc.nSLi = 30;
     tc.nSLj = 30;
-    tc.throatFlag = 0; // total conditions
-    tc.idealIsp = 213.5;                          // CEA isp
+    tc.throatFlag = 0;                              // total conditions
+    tc.idealIsp = 213.5;                            // CEA isp
 
     tc.designParamValue = 3.3263;
     tc.thetaBi = 15;

@@ -426,7 +426,7 @@ void MOC_GridCalc::OutputStreamlines(int iEnd, int jEnd, int nni, int nnj, int g
 
 	fstream ofile;
 	ofile.open("MOC_SL.plt",ios::out);
-	ofile << "VARIABLES = \"X/R\",\"Y/R\",\"Z/R\",\"R/R\",\"Mach\",\"Pres\",\"Temp\",\"Rho\",\"Theta\", \"Gamma\", \"Massflow\"" 
+	ofile << "VARIABLES = \"X/R\",\"Y/R\",\"Z/R\",\"R/R\",\"Mach\",\"Pres\",\"Temp\",\"Rho\",\"Theta\", \"Gamma\", \"Massflow\"," 
 		<< "\"J\"" << endl
 		<< "TITLE = \"Streamline Data file\"" << endl
 		<< "text  x=5  y=93   t=\"Streamline Data\"" << endl;
