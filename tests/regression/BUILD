@@ -7,6 +7,6 @@ cc_test(
         "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
-    copts = ["-std=c++23"],
+    copts = ["-std=c++20"],
     size = "medium",
 )

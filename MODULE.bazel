@@ -7,8 +7,9 @@
 
 bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
 bazel_dep(name = "googletest", version = "1.15.2")
-
+bazel_dep(name = "mp-units", version = "2.5.0.bcr.0")
 git_override(
+
     module_name = "hedron_compile_commands",
     remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
     commit = "0e990032f3c5a866e72615cf67e5ce22186dcb97",  # Latest as of now
