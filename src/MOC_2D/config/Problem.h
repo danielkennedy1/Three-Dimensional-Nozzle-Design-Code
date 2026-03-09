@@ -4,13 +4,13 @@
 
 namespace moc_2d {
 struct NozzleProblem {
-    InitialConditions<Total>  conditions;
+    InitialConditions         conditions;
     ThroatCurve               throat_curve;
     Geometry                  geometry;
     SolverConfiguration       solver_config;
     DesignTarget              target;
 
-    NozzleProblem& with_conditions(InitialConditions<Total> c) {
+    NozzleProblem& with_conditions(InitialConditions c) {
         conditions = c; return *this;
     }
     NozzleProblem& with_throat(ThroatCurve t) {

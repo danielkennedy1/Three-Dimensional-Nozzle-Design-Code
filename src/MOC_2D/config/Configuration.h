@@ -10,14 +10,10 @@ using namespace mp_units;
 
 namespace moc_2d {
 
-struct Total {};
-struct Throat {};
+enum class ConditionType { Total, Throat };
 
-template<typename T>
-concept Conditions = std::same_as<T, Total> || std::same_as<T, Throat>;
-
-template<Conditions c>
 struct InitialConditions {
+    ConditionType                                 type;               // Whether at t (total) or * (throat, sonic)
     quantity<si::pascal>                          pressure;           // p₀
     quantity<si::kelvin>                          temperature;        // T₀
     quantity<si::kilogram / si::mole>             molecular_weight;   // Mwt
@@ -27,9 +23,6 @@ struct InitialConditions {
     quantity<si::second>                          ideal_specific_impulse; // Isp
     quantity<angular::radian>                     initial_theta_b;    // θ_B
 };
-
-using InitialTotalConditions  = InitialConditions<Total>;
-using InitialThroatConditions = InitialConditions<Throat>;
 
 struct ThroatCurve {
     quantity<one> upstream_radius;      // Ru / R*
