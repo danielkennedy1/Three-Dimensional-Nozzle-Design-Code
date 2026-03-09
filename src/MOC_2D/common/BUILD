@@ -1,14 +1,13 @@
 cc_library(
-    name = "types",
-    hdrs = ["types.h"],
-    deps = ["@mp-units//:mp-units"],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "math",
-    hdrs = ["Math.h"],
-    srcs = ["Math.cpp"],
+    name = "common",
+    hdrs = [
+        "Math.h",
+        "GridPoint.h"
+    ],
+    srcs = [
+        "Math.cpp",
+        "GridPoint.cpp"
+    ],
     deps = ["@mp-units//:mp-units"],
     visibility = ["//visibility:public"],
 )
