@@ -6,22 +6,23 @@
 #include <mp-units/systems/si.h>
 #include <mp-units/systems/angular.h>
 
-using namespace mp_units;
-
 namespace moc_2d {
+
+using mp_units::quantity;
+using mp_units::one;
 
 enum class ConditionType { Total, Throat };
 
 struct InitialConditions {
-    ConditionType                                 type;               // Whether at t (total) or * (throat, sonic)
-    quantity<si::pascal>                          pressure;           // p₀
-    quantity<si::kelvin>                          temperature;        // T₀
-    quantity<si::kilogram / si::mole>             molecular_weight;   // Mwt
-    quantity<one>                                 gamma;              // γ
-    quantity<si::pascal>                          ambient_pressure;   // pₐ
-    quantity<si::metre / si::second>              velocity;           // v
-    quantity<si::second>                          ideal_specific_impulse; // Isp
-    quantity<angular::radian>                     initial_theta_b;    // θ_B
+    ConditionType                                           type;               // Whether at t (total) or * (throat, sonic)
+    quantity<mp_units::si::pascal>                          pressure;           // p₀
+    quantity<mp_units::si::kelvin>                          temperature;        // T₀
+    quantity<mp_units::si::kilogram / mp_units::si::mole>   molecular_weight;   // Mwt
+    quantity<one>                                           gamma;              // γ
+    quantity<mp_units::si::pascal>                          ambient_pressure;   // pₐ
+    quantity<mp_units::si::metre / mp_units::si::second>    velocity;           // v
+    quantity<mp_units::si::second>                          ideal_specific_impulse; // Isp
+    quantity<mp_units::angular::radian>                     initial_theta_b;    // θ_B
 };
 
 struct ThroatCurve {
@@ -33,12 +34,12 @@ enum class Geometry { Planar, Axisymmetric };
 
 struct SolverConfiguration {
     size_t n_characteristics;
-    quantity<angular::radian> delta_angle_limit;
+    quantity<mp_units::angular::radian> delta_angle_limit;
     size_t n_rrc_above_bd;
 
     static std::expected<SolverConfiguration, std::string> create(
         size_t n_characteristics,
-        quantity<angular::radian> delta_angle_limit,
+        quantity<mp_units::angular::radian> delta_angle_limit,
         size_t n_rrc_above_bd
     ) {
         if (n_characteristics < 5)
@@ -48,7 +49,7 @@ struct SolverConfiguration {
 };
 
 struct ExitMachTarget       { quantity<one> mach; };
-struct ExitPressTarget      { quantity<si::pascal> pressure; };
+struct ExitPressTarget      { quantity<mp_units::si::pascal> pressure; };
 struct AreaRatioTarget      { quantity<one> eps; };
 struct NozzleLengthTarget   { quantity<one> length; };  // normalised to R*
 struct EndpointTarget       { quantity<one> x; quantity<one> r; };
