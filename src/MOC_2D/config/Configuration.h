@@ -15,14 +15,14 @@ enum class ConditionType { Total, Throat };
 
 struct InitialConditions {
     ConditionType                                           type;               // Whether at t (total) or * (throat, sonic)
-    quantity<mp_units::si::pascal>                          pressure;           // p₀
-    quantity<mp_units::si::kelvin>                          temperature;        // T₀
+    quantity<mp_units::si::pascal>                          pressure;           // p_0
+    quantity<mp_units::si::kelvin>                          temperature;        // T_0
     quantity<mp_units::si::kilogram / mp_units::si::mole>   molecular_weight;   // Mwt
-    quantity<one>                                           gamma;              // γ
-    quantity<mp_units::si::pascal>                          ambient_pressure;   // pₐ
+    quantity<one>                                           specific_heat_ratio;// gamma
+    quantity<mp_units::si::pascal>                          ambient_pressure;   // p_a
     quantity<mp_units::si::metre / mp_units::si::second>    velocity;           // v
     quantity<mp_units::si::second>                          ideal_specific_impulse; // Isp
-    quantity<mp_units::angular::radian>                     initial_theta_b;    // θ_B
+    quantity<mp_units::angular::radian>                     initial_theta_b;    // theta_B
 };
 
 struct ThroatCurve {
