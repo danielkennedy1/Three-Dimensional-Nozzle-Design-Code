@@ -188,7 +188,7 @@ class MOC_2D
 		void OutputTDKRAODataFile(int jStart, int jEnd);
 
 		//	Small functions that are used a couple of times to make the code simpler to read
-		double CalcMu(double mach);
+		double mach_angle(double mach);
 		double CalcA(double mach, double gamma);
 		double CalcB(double mach, double theta, double r);
 		double Calcb(double mach, double theta, double r);

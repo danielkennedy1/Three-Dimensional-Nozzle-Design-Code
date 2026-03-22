@@ -36,6 +36,7 @@
 // Forward declarations for test classes
 class MOCRegressionTest_RaoAxiNozzle_IdenticalResults_Test;
 class MOCRegressionTest_InvalidInput_SameBehavior_Test;
+class MOCLegacyTest_ThroatFlag_IsentropicPropertiesConstantAlongInitialLine_Test;
 
 namespace legacy {
 
@@ -48,8 +49,11 @@ enum failflag {NO, YES};
 class MOC_GridCalc
 {
 	// Friend declarations for regression tests
+    //MOCRegressionTest, ThroatFlag_IsentropicPropertiesConstantAlongInitialLine
+    //MOCLegacyTest, ThroatFlag_IsentropicPropertiesConstantAlongInitialLine
 	friend class ::MOCRegressionTest_RaoAxiNozzle_IdenticalResults_Test;
 	friend class ::MOCRegressionTest_InvalidInput_SameBehavior_Test;
+    friend class ::MOCLegacyTest_ThroatFlag_IsentropicPropertiesConstantAlongInitialLine_Test;
 
 	public:
 		MOC_GridCalc( void);
