@@ -7,9 +7,10 @@ cc_library(
         "NozzleSolver.h",
     ],
     deps = [
+        "@mp-units//:mp-units",
+        "@spdlog//:spdlog",
         "//src/MOC_2D/common:common",
         "//src/MOC_2D/config:config",
-        "@mp-units//:mp-units",
     ],
     visibility = ["//visibility:public"],
 )

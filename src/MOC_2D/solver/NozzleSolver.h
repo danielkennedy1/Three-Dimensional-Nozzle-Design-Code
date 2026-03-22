@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "spdlog/spdlog.h"
+
 #include "src/MOC_2D/common/Grid.h"
 #include "src/MOC_2D/common/Result.h"
 #include "src/MOC_2D/common/Math.h"

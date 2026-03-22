@@ -6,8 +6,10 @@
 ###############################################################################
 
 bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
-bazel_dep(name = "googletest", version = "1.15.2")
+bazel_dep(name = "googletest", version = "1.17.0", dev_dependency = True)
 bazel_dep(name = "mp-units", version = "2.5.0.bcr.0")
+bazel_dep(name = "spdlog", version = "1.17.0")
+
 git_override(
 
     module_name = "hedron_compile_commands",

@@ -9,4 +9,4 @@ build:dbg --copt=-O0
 build:dbg --copt=-g
 build:dbg --copt=-fno-omit-frame-pointer
 build:dbg --cxxopt=-std=c++23
-
+build:dbg --copt=-DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG
