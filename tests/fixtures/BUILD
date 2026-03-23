@@ -8,3 +8,14 @@ cc_library(
     ],
     visibility = ["//tests:__subpackages__"],
 )
+
+cc_library(
+    name = "solver",
+    hdrs = ["solver.h"],
+    srcs = ["solver.cpp"],
+    deps = [
+        "//src/MOC_2D/solver:solver",
+        "@googletest//:gtest",
+    ],
+    visibility = ["//tests:__subpackages__"],
+)

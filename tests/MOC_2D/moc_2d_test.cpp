@@ -1,17 +1,12 @@
 #include <gtest/gtest.h>
 #include <cmath>
-#include "src/MOC_2D/solver/NozzleSolver.h"
+
+#include "spdlog/spdlog.h"
+
+#include "tests/fixtures/solver.h"
 
 using namespace moc_2d;
 using namespace mp_units;
-
-class TestSolver : public NozzleSolver {
-public:
-    using NozzleSolver::NozzleSolver;
-    std::expected<NozzleResult, std::string> solve() override {
-        return std::unexpected("not implemented");
-    }
-};
 
 TEST(MOC2DTest, ThroatInitialLine) {
     InitialConditions conditions {
@@ -39,7 +34,7 @@ TEST(MOC2DTest, ThroatInitialLine) {
 
     DesignTarget target = ExitMachTarget{ 2.6 * one };
 
-    auto solver = TestSolver(
+    auto solver = TestNozzleSolver(
         NozzleProblem()
             .with_conditions(conditions)
             .with_throat(throat_curve)
@@ -55,17 +50,17 @@ TEST(MOC2DTest, ThroatInitialLine) {
     // TODO: Proper debug logging
     // These values look vaguely correct which is promising anyway
 
-    //std::println("Axial Positions:");
-    //for (const auto& row : solver.grid.points) {
-    //    for (const auto& x : row) std::print("{} ", x.axial_position);
-    //    std::println("");
-    //}
+    spdlog::debug("Axial Positions:");
+    for (const auto& row : solver.get_grid().points) {
+        for (const auto& x : row) spdlog::debug("{} ", x.axial_position.numerical_value_in(mp_units::one));
+        spdlog::debug("");
+    }
 
-    //std::println("Radial Positions:");
-    //for (const auto& row : solver.grid.points) {
-    //    for (const auto& x : row) std::print("{} ", x.radial_position);
-    //    std::println("");
-    //}
+    spdlog::debug("Radial Positions:");
+    for (const auto& row : solver.get_grid().points) {
+        for (const auto& x : row) spdlog::debug("{} ", x.radial_position.numerical_value_in(mp_units::one));
+        spdlog::debug("");
+    }
 }
 
 int main(int argc, char **argv) {

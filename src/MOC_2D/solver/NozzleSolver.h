@@ -2,25 +2,26 @@
 
 #include <expected>
 #include <cmath>
-#include <iostream>
+#include <cassert>
 
-#include "spdlog/spdlog.h"
+
+#include "src/MOC_2D/config/Problem.h"
 
 #include "src/MOC_2D/common/Grid.h"
 #include "src/MOC_2D/common/Result.h"
-#include "src/MOC_2D/common/Math.h"
-#include "src/MOC_2D/config/Problem.h"
+#include "src/MOC_2D/common/Model.h"
 
-// abstract class with things common between nozzles, then different types
-// inherit from this and have their own solve() function or something
-//
-// HAS: a geometry, which is the solution i guess
-//
-class MOC2DTest_ThroatInitialLine_Test;
+// NOTE: There's probably scope for neater polymorphism
+// with the velocity calculations in the transsonic region given 
+// total conditions. The transonic velocity calculation "belongs"
+// to the geometry type, i.e. axisymmetric / planar, and whether
+// it gets called is decided by the conditions type, so possible
+// to offload the complication of that dispatch there. could be
+// very deep DI chain so potentially worse to comprehend and debug
+
 
 namespace moc_2d {
 class NozzleSolver {
-friend class ::MOC2DTest_ThroatInitialLine_Test;
 public:
     NozzleSolver(
         NozzleProblem problem
@@ -28,11 +29,11 @@ public:
         problem(problem)
     {};
     virtual std::expected<NozzleResult, std::string> solve() = 0;
-private:
+protected:
     NozzleProblem problem;
     NozzleGrid grid{};
-protected:
     std::expected<void, std::string> calc_initial_throat_line();
     std::expected<void, std::string> calc_rrcs_along_arc();
+    TransonicVelocity calc_transsonic_velocity(GridPoint point, Geometry geometry, mp_units::quantity<mp_units::one> upstream_radius);
 };
 }
