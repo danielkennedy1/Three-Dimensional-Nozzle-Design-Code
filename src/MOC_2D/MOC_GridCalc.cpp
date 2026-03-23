@@ -713,7 +713,7 @@ int MOC_2D::CalcConeNozzle( int paramType, double *paramMatch,
 	//	Note: The Initial throat line TT' has alrady been computed.
 	//	This routine is much simpler than the contoured nozzle because the 
 	//	wall has already been set. The only thing left to do it to calculate the
-	//	MOC grid.
+	//	Mproblem.conditions.pressure, machOC grid.
 	
 	double paramExit, paramErr,ratio = 0;
 	int j;
@@ -2785,8 +2785,7 @@ dummyStruct MOC_2D::CalcIsentropicP_T_RHO( double g, double m)
 //************************************************************************************
 //************************************************************************************
 //************************************************************************************
-int MOC_2D::CalcInitialThroatLine( double rUp, int n, double g, 
-										   double pAmb, int geom, int tFlag, double mT)
+int MOC_2D::CalcInitialThroatLine( double rUp, int n, double g, double pAmb, int geom, int tFlag, double mT)
 {
 	//	rUp: upstream throat radius
 	//	nType: nozzle type
@@ -2810,7 +2809,7 @@ int MOC_2D::CalcInitialThroatLine( double rUp, int n, double g,
 	//	at the top nozzle wall.
 
 	int i;
-	double R,drdx;
+	double R, drdx;
 	x[0][0] = 0.0;
 		
 	for ( i = 0; i <= n; i++) // from the wall to the centerline
@@ -2822,14 +2821,14 @@ int MOC_2D::CalcInitialThroatLine( double rUp, int n, double g,
 		if ( i != 0) 
 		{
 			// This calculates a new X assumed it falls on the RRC
-			drdx = rDyDx(theta[i-1][0],mach_angle(mach[i-1][0]));
+			drdx = rDyDx(theta[i-1][0], mach_angle(mach[i-1][0]));
 			
 		}
 		
 		//	Within SAUER the other properties are calculated
 //		if (!tFlag) Sauer(i,geom,rUp); 
 		mach[i][0] = 2.0;
-		if (!tFlag)
+		if (!tFlag) // Total conditions given
 		{
 			if (i != 0)
 			{
@@ -2846,7 +2845,7 @@ int MOC_2D::CalcInitialThroatLine( double rUp, int n, double g,
 			else if(KLThroat(i,geom,rUp) == SEC_FAIL) return SEC_FAIL;
 			
 		}
-		else	
+        else // throat conditions given
 		{
 			R = GASCON/molWt;
 			theta[i][0] = 0.0;
@@ -3080,9 +3079,27 @@ void MOC_2D::Sauer(int i, int geom, double RS)
     return;
 }
 
-//****************************************************************************************
-//****************************************************************************************
-//****************************************************************************************
+// NOTE:
+// Inputs: 
+// Radial position of point (known)
+// Axial position (This isn't ran on i = 0, but afterwards the x is calculated from drdx and stuff)
+// gamma of point
+// Geometry (Whether to use axisymmetric or planar)
+// Sonic radius (upstream radius)
+// ...
+// Does these mad calculations,
+// Performs checks:
+// if V is very small make it 0
+//
+// Outputs: 
+// U is axial velocity component
+// V is radial velocity component
+//
+// Maybe outside: 
+// get flow angle and mach from U and V
+// if mach is subsonic then give out
+// Calculates the isentropic pressure, temp and density here
+
 int MOC_2D::KLThroat(int i, int geom, double RS)
 {
 	//	This is taken from 'Transonic Flow in Small Throat Radius Curvature Nozzles',

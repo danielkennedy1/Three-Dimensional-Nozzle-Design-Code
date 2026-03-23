@@ -5,7 +5,8 @@ using namespace mp_units;
 // NOTE: For the internals here, I'm bringing the mp_units types back
 // into standard double values, to make the calculations clearer
 
-namespace moc_2d::math {
+namespace moc_2d {
+namespace math {
     
 
     quantity<angular::radian> mach_angle(quantity<one> mach)
@@ -62,4 +63,5 @@ namespace moc_2d::math {
         return (pressure * molecular_weight) / (R_universal * temperature);
     }
 
+}
 }

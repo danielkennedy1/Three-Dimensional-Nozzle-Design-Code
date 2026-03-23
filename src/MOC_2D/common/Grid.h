@@ -8,6 +8,8 @@ namespace moc_2d {
 using mp_units::quantity;
 using mp_units::one;
 
+// NOTE: Some attributes could be made optional here, as all information about a point
+// is not determined simultaneously
 struct GridPoint {
     quantity<one>                                                   axial_position{};      // x
     quantity<one>                                                   radial_position{};     // r

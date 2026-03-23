@@ -54,11 +54,6 @@ class MOC_2D
 	public:
 		MOC_2D( void);
 		~MOC_2D(void);
-		/************************************************************
-		*															*
-		*					PUBLIC FUNCTIONS						*
-		*															*
-		************************************************************/
 		int SetInitialProperties(double pTotal, double temp, double mWt, 
 								double gamma, double pAmb, int n, double rwtu, double rwtd, 
 								double dtLimit, int nRRCAboveBD, int nSLi, int nSLj,
@@ -68,22 +63,16 @@ class MOC_2D
 		void SetSolutionParameters( int nozzleGeom, int nozzleType, int designParam, 
 			double designParamValue1, double designParamValue2, double thetaBi);
 		void SetPrintMode(int i) {printMode = i;}	
-		int CreateMOCGrid(void); // This is the main control function
+		int CreateMOCGrid(void);
 
 	private:
-		/************************************************************
-		*															*
-		*					PRIVATE MEMBERS 						*
-		*															*
-		************************************************************/
 		int nC; // number of characteristic to start (Default 101)
-		//	max values are used to initialize the data 
 		int maxLRC; // maximum number of LRCs
 		int maxRRC; // maximum number of RRCs
 		int *iLast; // The i coordinate of the last point for each j
-		int nozzleType;
-		int nozzleGeom;
-		int designParam;
+		nozzleType nozzleType;
+		nozzleGeom nozzleGeom;
+		param designParam;
 		int lastRRC; // Number of the last RRC
 		int nRRCAboveBD;
 		int nSLi;	//	Number of Streamlines to be output in the radial direction
