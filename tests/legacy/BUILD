@@ -2,7 +2,7 @@ cc_test(
     name = "moc_legacy_test",
     srcs = ["moc_legacy_test.cpp"],
     deps = [
-        "//src/MOC_Grid_BDE:MOC_Grid_BDE",
+        "//tests/fixtures:legacy_2d",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],

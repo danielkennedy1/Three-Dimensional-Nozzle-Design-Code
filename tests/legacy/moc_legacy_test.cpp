@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <cmath>
-#include "MOC_Grid_BDE/MOC_GridCalc_BDE.h"
+#include "tests/fixtures/legacy_2d.h"
 
 const double GASCON = 1545; // Universal Gas Constant ft-lbf/lbm-mol-R
 const double GRAV			=	32.174;
@@ -51,7 +51,7 @@ NozzleTestCase GetRaoAxiCase() {
     return tc;
 }
 
-TEST(MOCLegacyTest, ThroatFlag_IsentropicPropertiesConstantAlongInitialLine) {
+TEST_F(Legacy2d, ThroatFlag_IsentropicPropertiesConstantAlongInitialLine) {
     NozzleTestCase tc = GetRaoAxiCase();
     double g = tc.gamma;
     double ratio = 1.0 + (g - 1.0) / 2.0;  // M=1
@@ -59,8 +59,7 @@ TEST(MOCLegacyTest, ThroatFlag_IsentropicPropertiesConstantAlongInitialLine) {
     double staticPres = tc.pTotalPSI / pow(ratio, g / (g - 1.0));
     double throatVelocity = sqrt(g * GASCON / tc.molecularWeight * GRAV * staticTemp);
 
-    legacy::MOC_GridCalc* leg = new legacy::MOC_GridCalc();
-    leg->SetInitialProperties(
+    calc.SetInitialProperties(
         staticPres,
 		staticTemp,
 		tc.molecularWeight,
@@ -78,21 +77,19 @@ TEST(MOCLegacyTest, ThroatFlag_IsentropicPropertiesConstantAlongInitialLine) {
 		tc.idealIsp
     );
 
-    leg->InitializeDataMembers();
-    leg->SetPrintMode(1);
-    leg->CalcInitialThroatLine(tc.rwtu, leg->nC - 1, tc.gamma, tc.ambientPressure, legacy::nozzleGeom::AXI, 1, 1.0);
+    InitializeDataMembers();
+    calc.SetPrintMode(1);
+    CalcInitialThroatLine(tc.rwtu, get_nC() - 1, tc.gamma, tc.ambientPressure, legacy::nozzleGeom::AXI, 1, 1.0);
 
-    double pRef   = leg->pres[0][0];
-    double tRef   = leg->temp[0][0];
-    double rhoRef = leg->rho[0][0];
+    double pRef   = get_pres()[0][0];
+    double tRef   = get_temp()[0][0];
+    double rhoRef = get_rho()[0][0];
 
-    for (int i = 1; i <= leg->iLast[0]; ++i) {
-        EXPECT_DOUBLE_EQ(leg->pres[i][0],  pRef)   << "pres["  << i << "][0]";
-        EXPECT_DOUBLE_EQ(leg->temp[i][0],  tRef)   << "temp["  << i << "][0]";
-        EXPECT_DOUBLE_EQ(leg->rho[i][0],   rhoRef) << "rho["   << i << "][0]";
+    for (int i = 1; i <= get_iLast()[0]; ++i) {
+        EXPECT_DOUBLE_EQ(get_pres()[i][0],  pRef)   << "pres["  << i << "][0]";
+        EXPECT_DOUBLE_EQ(get_temp()[i][0],  tRef)   << "temp["  << i << "][0]";
+        EXPECT_DOUBLE_EQ(get_rho()[i][0],   rhoRef) << "rho["   << i << "][0]";
     }
-
-    delete leg;
 }
 
 int main(int argc, char **argv) {
