@@ -14,6 +14,7 @@ cc_library(
     hdrs = ["solver.h"],
     srcs = ["solver.cpp"],
     deps = [
+        "@mp-units//:mp-units",
         "//src/MOC_2D/solver:solver",
         "@googletest//:gtest",
     ],

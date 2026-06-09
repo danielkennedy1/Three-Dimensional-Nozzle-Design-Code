@@ -4,7 +4,7 @@
 
 
 //blatant claude
-class Legacy2d : public ::testing::Test {
+class Legacy2d : virtual public ::testing::Test {
 protected:
     legacy::MOC_GridCalc calc;
 

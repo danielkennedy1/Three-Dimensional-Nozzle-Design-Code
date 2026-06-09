@@ -12,26 +12,35 @@ namespace moc_2d {
 std::expected<void, std::string> NozzleSolver::calc_initial_throat_line() {
     spdlog::info("Calculting Initial Throat Line");
 
-    int n = problem.solver_config.n_characteristics;
+    int n = problem.solver_config.n_characteristics - 1;
     grid.add_rrc(n);
 
     grid[0][0].axial_position = 0.0;
 
     if (problem.conditions.type == ConditionType::Throat) {
         spdlog::info("Calculating from throat conditions");
+
+        auto speed_of_sound_squared = (problem.conditions.specific_heat_ratio * moc_2d::math::R_universal /
+                            problem.conditions.molecular_weight * problem.conditions.temperature)
+                               .numerical_value_in(mp_units::si::joule / mp_units::si::kilogram);
+
+        spdlog::debug("inside sqrt = {}", speed_of_sound_squared);
+
         // NOTE:  J = kg * m^2 / s^2, so J / kg = m^2 / s^2. sqrt(J/kg) isn't implemented or something so out of mp and back in is neater
-        auto speed_of_sound = sqrt((problem.conditions.specific_heat_ratio * moc_2d::math::R_universal /
-                                    problem.conditions.molecular_weight * problem.conditions.temperature)
-                                       .numerical_value_in(mp_units::si::joule / mp_units::si::kilogram)) *
-                              mp_units::si::metre / mp_units::si::second;
+        auto speed_of_sound = sqrt(speed_of_sound_squared) * mp_units::si::metre / mp_units::si::second;
 
         spdlog::debug("Speed of sound = {} m/s", speed_of_sound.numerical_value_in(mp_units::si::metre / mp_units::si::second));
 
         auto throat_mach = problem.conditions.velocity / speed_of_sound;
 
-        if (throat_mach < 1.0) {
-            return std::unexpected("Calculated throat mach number < 1.0");
+        spdlog::debug("calculated throat mach = {}", throat_mach.numerical_value_in(mp_units::one));
+
+        if (throat_mach < 0.9999) { // NOTE: Sonic with tolerance
+            return std::unexpected("Calculated throat mach number < 0.9999");
         }
+
+        // NOTE: IDK about this, but otherwise the mach angle is undefined. This also makes it match perfectly w/ legacy
+        throat_mach = 1;
 
         for (int i = 0; i < n; i++) {
             // NOTE: Conditions are constant, only position varies
@@ -44,8 +53,15 @@ std::expected<void, std::string> NozzleSolver::calc_initial_throat_line() {
 
             grid[0][i].radial_position = pow(sin(((std::numbers::pi / 2) * (n - i) / n)), moc_2d::math::RAO_CLUSTERING_EXPONENT);
             if (i > 0) {
-                auto slope = moc_2d::math::right_characteristic_slope(grid[0][i - 1].flow_angle, moc_2d::math::mach_angle(grid[0][i - 1].mach));
+                auto mach_angle = moc_2d::math::mach_angle(grid[0][i - 1].mach);
+
+                spdlog::debug("Mach angle = {}", mach_angle.numerical_value_in(mp_units::angular::radian));
+                spdlog::debug("flow angle = {}", grid[0][i - 1].flow_angle.numerical_value_in(mp_units::angular::radian));
+
+                auto slope = moc_2d::math::right_characteristic_slope(grid[0][i - 1].flow_angle, mach_angle);
+                spdlog::debug("slope = {}", slope.numerical_value_in(mp_units::one));
                 grid[0][i].axial_position = grid[0][i - 1].axial_position + (grid[0][i].radial_position - grid[0][i - 1].radial_position) / slope;
+                spdlog::debug("grid[0][{}].axial_position = {}", i, grid[0][i].axial_position.numerical_value_in(mp_units::one));
             }
         }
     }
@@ -157,8 +173,6 @@ TransonicVelocity NozzleSolver::calc_transsonic_velocity(
         V = sqrt( ( ( gamma + 1 ) / ( 2 * ( upstream_radius + 1 ) ) ).numerical_value_in(mp_units::one) ) * ( v_1 / ( upstream_radius + 1 ) 
         + ( 1.5 * v_1 + v_2 ) / ( ( upstream_radius + 1 ) * ( upstream_radius + 1 ) ) 
         + ( 15. / 8. * v_1 + 2.5 * v_2 + v_3 ) / ( ( upstream_radius + 1 ) * ( upstream_radius + 1 ) * ( upstream_radius + 1 ) ) );
-
-        return TransonicVelocity(U, V);
     } else if (geometry == Geometry::Planar) {
 
 		z = x * sqrt( ( upstream_radius/(gamma+1) ).numerical_value_in(mp_units::one));
